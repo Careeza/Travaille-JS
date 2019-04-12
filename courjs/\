@@ -1,0 +1,5 @@
+let message = "Je suis le meilleur en js";
+let other = `moi aussi je suis trop fort ${message}`;
+let isGreater
+let types = typeof message
+alert ( types );
