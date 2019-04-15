@@ -25,6 +25,8 @@ function test () {
  * \/ ArrowDown
 */
 
+let img = new Image();
+
 const canvas = document.getElementById('canvas'); // <= Initialisation canvas memoire
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth; // <= taille du canvas en largeur adapter a la fenetre
@@ -142,7 +144,9 @@ function mouvement(mvt) {
 function playerMouvement() {
 	ctx.clearRect(square.pos.x, square.pos.y, square.size, square.size);
 	mouvement(square)
-	ctx.fillRect(square.pos.x, square.pos.y, square.size, square.size);
+	ctx.fillStyle = 'black';
+//	ctx.fillRect(square.pos.x, square.pos.y, square.size, square.size);
+	ctx.drawImage(img, square.pos.x, square.pos.y, 50, 50);
 	square.score++;
 }
 
@@ -161,6 +165,7 @@ function enemyMouvement() {
 		if (!collision(enemy)) {
 			return (false);
 		}
+		ctx.fillStyle = 'red';
 		ctx.clearRect(enemy.pos.x, enemy.pos.y, enemy.size.x, enemy.size.y);
 		mouvement(enemy)
 		enemy.pos.x > 0 && ctx.fillRect(enemy.pos.x, enemy.pos.y, enemy.size.x, enemy.size.y);
@@ -184,6 +189,12 @@ function game() {
 
 }
 
+function loadimg(x, y) {
+	img.addEventListener('load', (load) => {
+		ctx.drawImage(img, x, y, 50, 50);
+	})
+}
+
 function getKey() {
 	document.addEventListener('keydown', (event) => {
 		dealKey(event.key);
@@ -191,6 +202,7 @@ function getKey() {
 	})
 }
 
+//loadimg(0, 0);
 getKey();
 createEnemy(600);
 createEnemy(1000);
@@ -199,5 +211,6 @@ createEnemy(1800);
 createEnemy(2200);
 //createEnemy(2600);
 ctx.fillRect(0, square.pos.y + square.size, canvas.width, 10);
-ctx.fillStyle = 'red';
-game()
+img.onload = game;
+
+img.src = "./44497.png";
