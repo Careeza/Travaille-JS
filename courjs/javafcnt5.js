@@ -183,6 +183,7 @@ function game() {
 			}
 			ctx.fillStyle = 'black';
 			ctx.fillRect(0, ground + square.size, canvas.width, 10);
+			square.score = 0;
 		} else {
 		ctx.font = '100px Quicksand';
 		ctx.fillStyle = 'red';
@@ -190,8 +191,12 @@ function game() {
 		ctx.fillText(`Game Over Score = ${square.score}`, canvas.width / 2, canvas.height / 2);
 		return (false);
 		}
-		
 	}
+	ctx.fillStyle = 'black';
+	ctx.clearRect(0, 0, 100, 100);
+	ctx.font = '20px Quicksand';
+	ctx.fillText(`Score ${square.score}`, 0, 20);
+	ctx.fillStyle = 'red';
 	square.score++;
 	requestAnimationFrame(game);
 }
