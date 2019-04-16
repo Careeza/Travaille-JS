@@ -8,6 +8,17 @@ function test () {
 	const fn = test()
 }*/
 
+
+/* Fonction closure =>
+function test () {
+	let teub = 0
+	return () => {
+		console.log(teub++)
+	}
+
+	const fn = test()
+}*/
+
 	// Width = largeur = x
 	// Height = hauteur = y
 	// strokeRect (x, y, largeur, hauteur); => contour rectangle
