@@ -58,10 +58,10 @@ const square = {
 	score: 0
 }
 
-const ennemies = []
+let ennemies = []
 
 function createEnemy(x) {
-	let size = Math.round(Math.random()) * 70;
+	let size = Math.round(Math.random() * 70);
 	let surprise = Math.round(Math.random()) * 300;
 
 	const obj = {
@@ -92,7 +92,7 @@ function createEnemy(x) {
 	if (Math.round(Math.random() * 10) > 1) {
 		obj.suprisejump = -600;
 	}
-	if (Math.round(Math.random()) == 1) {
+	if (Math.round(Math.random() * 3) == 1) {
 		obj.size.y = 50;
 		obj.pos.y = ground - 200;
 		obj.ground = ground - 200;
@@ -124,13 +124,10 @@ function dealKey(key) {
 		square.frame = 0;
 		square.dbjump = true;
 	}
-	if (key === 'ArrowLeft') {
-		createEnemy();
-	}
 }
 
 function mouvement(mvt) {
-	mvt.pos.x = (mvt.pos.x + mvt.speed.x) % canvas.width;
+	mvt.pos.x = mvt.pos.x + mvt.speed.x;
 	mvt.pos.y = ((mvt.acc.y / 2) * (mvt.frame ** 2) - (mvt.speed.y * mvt.frame) + mvt.newground);
 	if (mvt.pos.y > mvt.ground) {
 		mvt.jmp = false
@@ -147,7 +144,6 @@ function playerMouvement() {
 	ctx.fillStyle = 'black';
 //	ctx.fillRect(square.pos.x, square.pos.y, square.size, square.size);
 	ctx.drawImage(img, square.pos.x, square.pos.y, 50, 50);
-	square.score++;
 }
 
 function enemyMouvement() {
@@ -159,7 +155,7 @@ function enemyMouvement() {
 			enemy.frame = 0;
 		}
 		if (enemy.pos.x < 0) {
-			createEnemy(2000);
+			createEnemy(2800);
 			ennemies.splice(0, 1);
 		}
 		if (!collision(enemy)) {
@@ -178,21 +174,26 @@ function game() {
 	if (!enemyMouvement()) {
 		ctx.fillStyle = 'white';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		if (confirm("Try again")) {
+			ennemies.splice(0, 7);
+			let num = 600;
+			while (num <= 3000 ) {
+				createEnemy(num);
+				num += 400;
+			}
+			ctx.fillStyle = 'black';
+			ctx.fillRect(0, ground + square.size, canvas.width, 10);
+		} else {
 		ctx.font = '100px Quicksand';
 		ctx.fillStyle = 'red';
 		ctx.textAlign = "center"; 
 		ctx.fillText(`Game Over Score = ${square.score}`, canvas.width / 2, canvas.height / 2);
 		return (false);
+		}
+		
 	}
+	square.score++;
 	requestAnimationFrame(game);
-//	deal_key("lol");
-
-}
-
-function loadimg(x, y) {
-	img.addEventListener('load', (load) => {
-		ctx.drawImage(img, x, y, 50, 50);
-	})
 }
 
 function getKey() {
@@ -202,15 +203,13 @@ function getKey() {
 	})
 }
 
-//loadimg(0, 0);
 getKey();
-createEnemy(600);
-createEnemy(1000);
-createEnemy(1400);
-createEnemy(1800);
-createEnemy(2200);
-//createEnemy(2600);
+
+let num = 600;
+while (num <= 3000 ) {
+	createEnemy(num);
+	num += 400;
+}
 ctx.fillRect(0, square.pos.y + square.size, canvas.width, 10);
 img.onload = game;
-
 img.src = "./44497.png";
