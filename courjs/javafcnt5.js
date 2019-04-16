@@ -55,7 +55,8 @@ const square = {
 	saveframe: 0,
 	jump: false,
 	dbjump: false,
-	score: 0
+	score: 0,
+	bestscore: 0
 }
 
 let ennemies = []
@@ -124,6 +125,11 @@ function dealKey(key) {
 		square.frame = 0;
 		square.dbjump = true;
 	}
+	if (key === 'ArrowRight') {
+		ctx.clearRect(ennemies[0].pos.x, ennemies[0].pos.y, ennemies[0].size.x, ennemies[0].size.y);
+		createEnemy(ennemies[ennemies.length - 1].pos.x + 400);
+		ennemies.splice(0, 1);
+	}
 }
 
 function mouvement(mvt) {
@@ -155,47 +161,56 @@ function enemyMouvement() {
 			enemy.frame = 0;
 		}
 		if (enemy.pos.x < 0) {
-			createEnemy(2800);
+			createEnemy(ennemies[ennemies.length - 1].pos.x + 400);
 			ennemies.splice(0, 1);
+		} else {
+			ctx.clearRect(enemy.pos.x, enemy.pos.y, enemy.size.x, enemy.size.y);
+			mouvement(enemy)
+			ctx.fillStyle = 'red';
+			enemy.pos.x > 0 && ctx.fillRect(enemy.pos.x, enemy.pos.y, enemy.size.x, enemy.size.y);
 		}
 		if (!collision(enemy)) {
 			return (false);
 		}
-		ctx.fillStyle = 'red';
-		ctx.clearRect(enemy.pos.x, enemy.pos.y, enemy.size.x, enemy.size.y);
-		mouvement(enemy)
-		enemy.pos.x > 0 && ctx.fillRect(enemy.pos.x, enemy.pos.y, enemy.size.x, enemy.size.y);
 	}
 	return (true);
+}
+
+function gameOver() {
+	ctx.fillStyle = 'white';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	if (confirm("Try again")) {
+		ennemies.splice(0, ennemies.length);
+		let num = 600;
+		while (num <= 3000 ) {
+			createEnemy(num);
+			num += 400;
+		}
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0, ground + square.size, canvas.width, 10);
+		square.score = 0;
+		return (true);
+		} else {
+			ctx.font = '100px Quicksand';
+			ctx.fillStyle = 'red';
+			ctx.textAlign = "center"; 
+			ctx.fillText(`Game Over Score = ${square.score}`, canvas.width / 2, canvas.height / 2);
+			return (false);
+	}
 }
 
 function game() {
 	playerMouvement();
 	if (!enemyMouvement()) {
-		ctx.fillStyle = 'white';
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
-		if (confirm("Try again")) {
-			ennemies.splice(0, 7);
-			let num = 600;
-			while (num <= 3000 ) {
-				createEnemy(num);
-				num += 400;
-			}
-			ctx.fillStyle = 'black';
-			ctx.fillRect(0, ground + square.size, canvas.width, 10);
-			square.score = 0;
-		} else {
-		ctx.font = '100px Quicksand';
-		ctx.fillStyle = 'red';
-		ctx.textAlign = "center"; 
-		ctx.fillText(`Game Over Score = ${square.score}`, canvas.width / 2, canvas.height / 2);
-		return (false);
-		}
+		if (!gameOver()) { return (false); }
 	}
 	ctx.fillStyle = 'black';
-	ctx.clearRect(0, 0, 100, 100);
+	ctx.clearRect(0, 0, 300, 21);
 	ctx.font = '20px Quicksand';
-	ctx.fillText(`Score ${square.score}`, 0, 20);
+	if (square.score > square.bestscore) {
+		square.bestscore = square.score;
+	}
+	ctx.fillText(`Score: ${square.score} Bestscore: ${square.bestscore}`, 0, 20);
 	ctx.fillStyle = 'red';
 	square.score++;
 	requestAnimationFrame(game);
@@ -215,6 +230,6 @@ while (num <= 3000 ) {
 	createEnemy(num);
 	num += 400;
 }
+img.src = "./44497.png";
 ctx.fillRect(0, square.pos.y + square.size, canvas.width, 10);
 img.onload = game;
-img.src = "./44497.png";
