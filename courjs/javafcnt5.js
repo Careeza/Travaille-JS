@@ -6,7 +6,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth; // <= taille du canvas en largeur adapter a la fenetre
 canvas.height = window.innerHeight; // <= taille du canvas en hauteur adapter a la fenetre
 
-const ground = Math.round(canvas.height / 2);
+const ground = Math.round(canvas.height / 4) * 3;
 
 document.addEventListener('keydown', (event) => {
 	dealKey(event.key);
@@ -182,9 +182,9 @@ function ennemyMouvement() {
 		}
 		if (ennemy.pos.x < 0) {
 			if (ennemies[index].bird !== true) {
-				createEnnemy(Math.round(ennemies[ennemies.length - 1].pos.x + dist + ( 0.66 * square.score)));
+				createEnnemy(Math.round(ennemies[ennemies.length - 1].pos.x + dist + (0.66 * square.score)));
 			} else {
-				createBird(ennemies[ennemies.length - 1].pos.x + dist);
+				createBird(Math.round(ennemies[ennemies.length - 1].pos.x + dist + (0.66 * square.score)));
 			}
 			ennemies.splice(index, 1);
 		} else {

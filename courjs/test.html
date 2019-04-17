@@ -1,17 +1,34 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	<style>
+		<style>
 			@import url('https://fonts.googleapis.com/css?family=Quicksand');
 			body{
+				background-image:url("Mario_img.png");
 				font-family: 'Quicksand';
 				margin: 0;
+			}
+			#jeuGoogle {
+				height: 10%;
+				width: 10%;
+				margin-top: 20%;
+				margin-left: 20%
+			}
+			#flappyBird {
+				height: 10%;
+				width: 10%;
+				margin-left: 40%
 			}
 		</style>
 	</head>
 	<body>
-		<canvas id="canvas"></canvas>
-		<script src = "javafcnt5.js"> </script>
+		<canvas id="flappyBirdCanvas"></canvas>
+		<canvas id="googleGameCanvas"></canvas>
+		<img src="44497.png" onclick="myFunction()" id="jeuGoogle" alt="Error">
+		<img src="44497.png" onclick="myFunction()" id="flappyBird" alt="Error">
+<!--	<input onclick="my2Function()" type="image" id="image2" src="44497.png"> </input> -->
+		<script src = "googleGame.js"> </script>
+		<script src = "flappyBird.js"> </script>
 	</body>
 </html>
 
